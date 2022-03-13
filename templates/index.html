@@ -108,6 +108,7 @@
                         } else {
                             temp_html =   `<li>
                                             <h2 class="done">✅ ${bucket}</h2>
+                                             <button onclick="bucket_not_done(${num})" type="button" class="btn btn-outline-danger">취소</button>
                                         </li>`
                         }
                         $('#bucket-list').append(temp_html)
@@ -135,6 +136,18 @@
             $.ajax({
                 type: "POST",
                 url: "/bucket/done",
+                data: {num_give: num},
+                success: function (response) {
+                    alert(response["msg"])
+                    window.location.reload()
+                }
+            });
+        }
+
+         function bucket_not_done(num) {
+            $.ajax({
+                type: "POST",
+                url: "/bucket/not_done",
                 data: {num_give: num},
                 success: function (response) {
                     alert(response["msg"])

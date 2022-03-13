@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, jsonify
 app = Flask(__name__)
 
 from pymongo import MongoClient
-client = MongoClient('mongodb+srv://test:1234@cluster0.uwzfe.mongodb.net/Cluster0?retryWrites=true&w=majority')
+client = MongoClient('암호화 후 다시 올리기')
 db = client.dbsparta
 
 
@@ -35,6 +35,13 @@ def bucket_done():
     return jsonify({'msg': '버킷 완료!'})
 
 
+@app.route("/bucket/not_done", methods=["POST"])
+def bucket_not_done():
+    num_receive = request.form['num_give']
+    db.bucket.update_one({'num': int(num_receive)}, {'$set': {'done': 0}})
+    return jsonify({'msg': '취소 완료!'})
+
+
 @app.route("/bucket", methods=["GET"])
 def bucket_get():
     bucket_list = list(db.bucket.find({}, {'_id': False}))
@@ -42,4 +49,4 @@ def bucket_get():
 
 
 if __name__ == '__main__':
-    app.run('0.0.0.0', port=5000, debug=True)
+    app.run('0.0.0.0', port=4000, debug=True)
